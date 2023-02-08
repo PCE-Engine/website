@@ -12,33 +12,53 @@ var currentX, currentY; // TO SEND AS FINAL POS
 
 var activePiece, markedPiece;
 
+var move = true;
+
 function focusPiece(event) {
-    if (markedPiece)
-        markedPiece.style.boxShadow =  '';
+    if (
+    (move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+    || 
+    (!move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+    ) {
+        if (markedPiece)
+            markedPiece.style.boxShadow =  '';
 
-    activePiece = event.target;
+        activePiece = event.target;
 
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
 
-    offsetX = event.offsetX;
-    offsetY = event.offsetY;
+        offsetX = event.offsetX;
+        offsetY = event.offsetY;
 
-    activePiece.style.position = 'absolute'
-    activePiece.style.left = `${event.clientX - u}px` 
-    activePiece.style.top =`${event.clientY - u}px`
+        activePiece.style.position = 'absolute'
+        activePiece.style.left = `${event.clientX - u}px` 
+        activePiece.style.top =`${event.clientY - u}px`
 
-    markedPiece = event.target.parentElement;
-    markedPiece.style.boxShadow = 'inset 0 0 0 3px coral';
-    // call function get moves
+        markedPiece = event.target.parentElement;
+        markedPiece.style.boxShadow = 'inset 0 0 0 3px coral';
+        // call function get moves
+    }
 }
 
 window.onmouseup = () => { 
-    // verification
-
     if (activePiece) {
         activePiece.style.position = `initial`
     }
+
+    // verification
+    if ((true) && activePiece) {
+        if (currentX != startX || currentY != startY) {
+            activePiece.parentElement.removeChild(activePiece);
+            chessboard[chessboard.length - currentY - 1][currentX].appendChild(activePiece);
+
+            if (markedPiece)
+                markedPiece.style.boxShadow =  '';
+
+            move = !move
+        }
+    }
+
     activePiece = null; 
     [currentY, currentX, startY, startX] = [0, 0, 0, 0]
 }
