@@ -25,19 +25,20 @@
 }
 
 #chess-board td, #chess-board td div {
-    width: 50px;
-    height: 50px;
+    width: 75px;
+    height: 75px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 750px) {
     #chess-board td, #chess-board td div {
-        width: calc(calc(100vw - 50px) / 9);
-        height: calc(calc(100vw - 50px) / 9);
+        width: calc(calc(100vw - 75px) / 9);
+        height: calc(calc(100vw - 75px) / 9);
     }    
 }
 
 .br, .bn, .bb, .bq, .bk, .bp, .wr, .wn, .wb, .wq, .wk, .wp {
     background-size: 100% 100%;
+    cursor:grab;
 }
 
 .br {
