@@ -4,13 +4,55 @@ import Chessboard from '../components/Chessboard.astro';
 ---
 
 <Layout title="Welcome to eChess">
+    <div id="cursor-box">
+        <div id="cursor"></div>
+    </div>
     <div id="layout">
-        <div id="cursor-box">
-            <div id="cursor"></div>
-        </div>
         <nav>
             <div><img src="/logo.png"><h1>eChess</h1></div>
         </nav>
+        <main>
+            <div id="width-limiter">
+                <div id="cards">
+                    <div id="cards-box">
+                        <article>
+                            <h2>Play</h2>
+                            <p>On <i>playechess.com</i> you can play against your friends under a form of tournament or just an amical game. You can play against bots as well and you can create classrooms to teach or to be tought.</p>
+                            <div><button>Register</button><button>Login</button></div>
+                        </article>
+                        <article>
+                            <h2>PCE Engine</h2>
+                            <p>PCE Engine is a chess engine written in C++ with a JavaScript implementation for browsers. Check out the project on <a target="_blank" href="https://github.com/PCE-Engine">Github</a>.</p>
+                        </article>
+                        <article>
+                            <h2>Stockfish API</h2>
+                            <p>Stockfish API enables you to execute Stockfish commands throw an API. Check out the project on <a target="_blank" href="https://github.com/PCE-Engine">Github</a>.</p>
+                        </article>
+                    </div>
+                </div>
+                <div id="sponsors">
+                    <h2>Sponsors</h2>
+                    <div>You can buy this spot</div>
+                    <button id="sponsor-btn">Become a sponsor</button>
+                </div>
+                <div id="contact">
+                    <h2>Contact</h2>
+                    <div id="contact-box">
+                        <div>
+                            <h3>Perrinjaquet Timeo</h3>
+                            <p>Working on the PCE Engine</p>
+                            <div><button id="discord-btn">Discord</button><button id="mail-btn">Mail</button><button id="github-btn">Github</button></div>
+                        </div>
+                        <div>
+                            <h3>Jasiukiewicz Tymon</h3>
+                            <p>Working on the website and Stockfish API</p>
+                            <div><button id="discord-btn">Discord</button><button id="mail-btn">Mail</button><button id="github-btn">Github</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer><i>eChess copyright © 2023-2023</i></footer>
     </div>
 </Layout>
 
@@ -24,15 +66,30 @@ import Chessboard from '../components/Chessboard.astro';
         display: grid;
         grid-template-rows: 140px 1fr 50px;
     }
+    #width-limiter {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 40px;
+    }
 
+    main {
+        overflow-y: hidden;
+        position: relative;
+    }
     body {
         background: #011109;
-        color: #eee;
-        position: relative;
+        color: #fefefe;
     }
     h1 {
         font-family: 'PT Serif', serif;
         font-size: 60px;
+        line-height: 150%;
     }
     nav {
         display: flex;
@@ -45,11 +102,108 @@ import Chessboard from '../components/Chessboard.astro';
     }
     nav img {
         max-height: calc(100% - 10px);
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
     }
-    @media screen and (max-width: 499px) {
+    @media screen and (max-width: 450px) {
         nav img {
             display: none;
         }
+        #width-limiter {
+            padding-top: 0px;
+            padding-bottom: 20px;
+        }
+    }
+
+    #cards {
+        width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    #cards::-webkit-scrollbar {
+        display: none;
+    }
+    #cards-box {
+        width: 1120px;
+        position: relative;
+        display: flex;
+        gap: 35px;
+    }
+    #cards article > div {
+        display: flex;
+        gap: 15px;
+    }
+    #cards p, #cards h2, #cards div {
+        margin-bottom: 10px;
+    }
+    #cards article {
+        width: 350px;
+    }
+    @media screen and (max-width: 450px) {
+        #cards article {
+            width: calc(calc(100% - 60px) / 3);
+        }
+        #cards-box {
+            width: 300%;
+            gap: 30px;
+        }
+    }
+
+    a {
+        color: #2ab670;
+    }
+    button {
+        padding: 13px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border-radius: 0px;
+        border: none;
+        font-size: 17px;
+    }
+
+    #sponsor-btn {
+        background: #c02fdd;
+        color: #fefefe;
+    }
+    #sponsors div {
+        height: 150px;
+        line-height: 150px;
+        font-size: 75px;
+        text-align: center;
+        opacity: 0.7;
+        border: 2px solid #01180c;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    #discord-btn, #mail-btn, #github-btn {
+        background: #18271a;
+        color: #fefefe;
+    }
+
+    #contact-box {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+    }
+    #contact-box > div {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+    #contact-box > div > div {
+        display: flex;
+        gap: 10px;
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
 
@@ -59,14 +213,32 @@ import Chessboard from '../components/Chessboard.astro';
         width: 100%;
         height: 100%;
         pointer-events: none;
+        overflow: hidden;
+        z-index: 20;
     }
     #cursor {
         height: 50px;
         width: 42px;
-        position: absolute;
-        background: url('/cursor.svg');
+        position: relative;
+        background: url('/cursor_default.svg');
         background-size: 100% 100%;
         top: -100%;
+        opacity: 0;
+
+        transform-origin: 0px 0px;
+        -o-transform-origin: 0px 0px;
+        -ms-transform-origin: 0px 0px;
+        -moz-transform-origin: 0px 0px;
+        -webkit-transform-origin: 0px 0px;
+
+        transform: rotate(-15deg);
+        -o-transform: rotate(-15deg);
+        -ms-transform: rotate(-15deg);
+        -moz-transform: rotate(-15deg);
+        -webkit-transform: rotate(-15deg);
+    }
+    body:hover #cursor {
+        opacity: 1;
     }
 </style>
 <style is:global>
@@ -83,11 +255,30 @@ import Chessboard from '../components/Chessboard.astro';
         if (!(('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))) {
             window.onmousemove = (event) => {
                 const cursor = document.getElementById('cursor');
-                let Y = event.clientY > window.innerHeight - 52 ? window.innerHeight - 52 : event.clientY;
-                let X = event.clientX > window.innerWidth - 44 ? window.innerWidth - 44 : event.clientX; 
-                cursor.style.top = `${Y}px`
-                cursor.style.left = `${X}px`
+                //let Y = event.clientY > window.innerHeight - 52 ? window.innerHeight - 52 : event.clientY;
+                //let X =  > window.innerWidth - 64 ? window.innerWidth - 64 : event.clientX; 
+                cursor.style.top = `${event.clientY}px`
+                cursor.style.left = `${event.clientX - 20}px`
             }
         }
     }
+
+
+    document.getElementById('cards').addEventListener("wheel", function (event) { 
+        event.preventDefault();
+        let isChild = false;
+
+        let p = event.target.parentElement;
+        try {
+            while (p.tagName != 'MAIN' && !isChild) {
+                if (p.id.includes('cards'))
+                    isChild = true;
+                p = p.parentElement;
+            }
+        } catch {}
+
+        if (event.target.id.includes('cards') || isChild) {
+            document.getElementById('cards').scrollLeft += event.deltaY
+        }
+    });
 </script>
