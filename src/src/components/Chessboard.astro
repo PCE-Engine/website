@@ -1,0 +1,478 @@
+<table id="chess-board" data-theme="default">
+    <tbody>
+        <tr>
+            <th>8</th>
+            <td><div class="br"></div></td>
+            <td><div class="bn"></div></td>
+            <td><div class="bb"></div></td>
+            <td><div class="bq"></div></td>
+            <td><div class="bk"></div></td>
+            <td><div class="bb"></div></td>
+            <td><div class="bn"></div></td>
+            <td><div class="br"></div></td>
+        </tr>
+        <tr>
+            <th>7</th>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+            <td><div class="bp"></div></td>
+        </tr>
+        <tr>
+            <th>6</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>5</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+            <td><div class="wp"></div></td>
+        </tr>
+        <tr>
+            <th>1</th>
+            <td><div class="wr"></div></td>
+            <td><div class="wn"></div></td>
+            <td><div class="wb"></div></td>
+            <td><div class="wq"></div></td>
+            <td><div class="wk"></div></td>
+            <td><div class="wb"></div></td>
+            <td><div class="wn"></div></td>
+            <td><div class="wr"></div></td>
+        </tr>
+        <tr>
+            <th></th>
+            <th>a</th>
+            <th>b</th>
+            <th>c</th>
+            <th>d</th>
+            <th>e</th>
+            <th>f</th>
+            <th>g</th>
+            <th>h</th>
+        </tr>
+    </tbody>
+</table>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+::selection {
+    background: inherit;
+    color: inherit;
+}
+
+:root {
+    /* Default theme */
+    --defaultthemew: #eee;
+    --defaultthemeb: #5b5b68;
+
+	/* Gotham theme*/
+	--gothamthemew: #f0d9b5;
+    --gothamthemeb: #b58863;
+}
+
+#chess-board {
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+}
+#chess-board th {
+    padding-right: 10px;
+}
+
+#chess-board td div {
+    width: 100%;
+    height: 100%;
+}    
+
+.br, .bn, .bb, .bq, .bk, .bp, .wr, .wn, .wb, .wq, .wk, .wp {
+    background-size: 100% 100%;
+    cursor:grab;
+}
+
+.br { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/br.png'); }
+.bn { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/bn.png'); }
+.bb { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/bb.png'); }
+.bq { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/bq.png'); }
+.bk { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/bk.png'); }
+.bp { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/bp.png'); }
+
+.wr { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wr.png'); }
+.wn { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wn.png'); }
+.wb { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wb.png'); }
+.wq { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wq.png'); }
+.wk { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wk.png'); }
+.wp { background-image: url('https://www.chess.com/chess-themes/pieces/neo/150/wp.png'); }
+
+table[data-theme=default] tr:nth-child(even) td:nth-child(even), table[data-theme=default] tr:nth-child(odd) td:nth-child(odd) {
+	background: var(--defaultthemeb);
+	color: var(--defaultthemew);
+}
+table[data-theme=default] tr:nth-child(even) td:nth-child(odd), table[data-theme=default] tr:nth-child(odd) td:nth-child(even){
+	background: var(--defaultthemew);
+	color: var(--defaultthemeb);
+}
+
+table[data-theme=gotham] tr:nth-child(even) td:nth-child(even), table[data-theme=gotham] tr:nth-child(odd) td:nth-child(odd) {
+	background: var(--gothamthemeb);
+	color: var(--gothamthemew);
+}
+table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=gotham] tr:nth-child(odd) td:nth-child(even){
+	background: var(--gothamthemew);
+	color: var(--gothamthemeb);
+}
+</style>
+<script>
+var chessboard = [];
+
+var u = (document.querySelector('#chess-board').parentElement.clientWidth - 25) / 18;
+window.onresize = (event) => {
+    u = (document.querySelector('#chess-board').parentElement.clientWidth - 25) / 18;
+    for (let i = 0; i < chessboard.length; i++) {
+        for (let j = 0; j < chessboard[i].length; j++) {
+            chessboard[i][j].style.width = `${2 * u}px`
+            chessboard[i][j].style.height = `${2 * u}px`
+        }
+    }
+}
+
+var offsetX, offsetY;
+var mouseX, mouseY;
+
+var indexX, indexY;
+
+var startX, startY;     // TO SEND AS START POS
+var currentX, currentY; // TO SEND AS FINAL POS
+
+var lastMoveX = -1, lastMoveY = -1;
+
+var activePiece, markedPiece;
+
+var warnCases = [];
+
+var move = true;
+
+function focusPiece(event) {
+    if (
+    ((move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+    || 
+    (!move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
+    && event.which == 1
+    ) {
+        if (markedPiece)
+            markedPiece.style.boxShadow =  '';
+
+        activePiece = event.target;
+
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        offsetX = event.offsetX;
+        offsetY = event.offsetY;
+
+        activePiece.style.position = 'absolute'
+        activePiece.style.left = `${event.clientX - u}px` 
+        activePiece.style.top =`${event.clientY - u}px`
+        activePiece.style.height = `${2 * u}px` 
+        activePiece.style.width = `${2 * u}px` 
+
+        markedPiece = event.target.parentElement;
+        markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+        // call function get moves
+    }
+}
+function mobileFocusPiece(event) {
+    if (
+        ((move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+        || 
+        (!move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
+        ) {
+            if (markedPiece)
+                markedPiece.style.boxShadow =  '';
+    
+            activePiece = event.target;
+    
+            mouseX = event.touches[0].clientX;
+            mouseY = event.touches[0].clientY;
+
+            let rect = event.target.getBoundingClientRect()
+            offsetX = (event.touches[0].clientX - window.pageXOffset - rect.left)
+            offsetY = (event.touches[0].clientY - window.pageYOffset - rect.top)
+            
+    
+            activePiece.style.position = 'absolute'
+            activePiece.style.left = `${mouseX - u}px` 
+            activePiece.style.top =`${mouseY - u}px`
+            activePiece.style.height = `${2 * u}px` 
+            activePiece.style.width = `${2 * u}px` 
+    
+            markedPiece = event.target.parentElement;
+            markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+            // call function get moves
+        }
+}
+
+// warn cases
+function warnCase(event) {
+    let target = event.target;
+    if (event.target.tagName == 'DIV')
+        target = target.parentElement;
+
+    let targetIndex = Array.prototype.indexOf.call(warnCases, target);
+    if (targetIndex >= 0) {
+        warnCases.splice(targetIndex, 1);
+        target.style.background = ''
+    }
+    else {
+        target.style.background = '#db4e2c'
+
+        let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
+        let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+        
+        if (X % 2 == Y % 2) 
+        target.style.background = '#f06948'
+                
+        warnCases.push(target);
+    }
+}
+function stopWarn(event) {
+    if (event.target.children.length == 0 && event.target.tagName != 'DIV') {
+        // delete marker
+        while (warnCases.length > 0) {
+            warnCases[0].style.background = ''
+            warnCases.shift()
+        }
+    }
+}
+
+window.onmouseup = () => { 
+    if (activePiece) {
+        activePiece.style.position = `initial`
+        activePiece.style.height = `` 
+        activePiece.style.width = `` 
+    }
+
+    // verification
+    if ((true) && activePiece) {
+        if ((currentX != startX || currentY != startY) && (chessboard.length - currentY - 1 < chessboard.length && chessboard.length - currentY - 1 >= 0) && (currentX < chessboard[chessboard.length - currentY - 1].length && currentX >= 0)) {
+            activePiece.parentElement.removeChild(activePiece);
+            chessboard[chessboard.length - currentY - 1][currentX].innerHTML = ''
+            chessboard[chessboard.length - currentY - 1][currentX].appendChild(activePiece);
+
+            if (markedPiece)
+                markedPiece.style.boxShadow =  '';
+
+            // delete marker
+            while (warnCases.length > 0) {
+                warnCases[0].style.background = ''
+                warnCases.shift()
+            }
+
+            move = !move
+        }
+    }
+
+    activePiece = null; 
+    chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
+    [currentY, currentX, startY, startX, lastMoveY, lastMoveX] = [0, 0, 0, 0, 0, 0]
+}
+window.ontouchend = () => {
+    if (activePiece) {
+        activePiece.style.position = `initial`
+        activePiece.style.height = `` 
+        activePiece.style.width = `` 
+    }
+
+    // verification
+    if ((true) && activePiece) {
+        if ((currentX != startX || currentY != startY) && (chessboard.length - currentY - 1 < chessboard.length && chessboard.length - currentY - 1 >= 0) && (currentX < chessboard[chessboard.length - currentY - 1].length && currentX >= 0)) {
+            activePiece.parentElement.removeChild(activePiece);
+            chessboard[chessboard.length - currentY - 1][currentX].innerHTML = ''
+            chessboard[chessboard.length - currentY - 1][currentX].appendChild(activePiece);
+
+            if (markedPiece)
+                markedPiece.style.boxShadow =  '';
+
+            // delete marker
+            while (warnCases.length > 0) {
+                warnCases[0].style.background = ''
+                warnCases.shift()
+            }
+
+            move = !move
+        }
+    }
+
+    activePiece = null; 
+    chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
+    [currentY, currentX, startY, startX, lastMoveY, lastMoveX] = [0, 0, 0, 0, 0, 0]
+}
+
+window.ontouchmove = (event) => {
+    if (activePiece != null) {
+        activePiece.style.left = `${event.touches[0].clientX - u}px` 
+        activePiece.style.top =`${event.touches[0].clientY - u}px`
+
+        indexX = (mouseX - event.touches[0].clientX - offsetX) / (u * 2)
+        if (indexX > 0)
+            indexX++;
+        indexY = (mouseY - event.touches[0].clientY - offsetY) / (u * 2)
+            if (indexY > 0)
+                indexY++;
+
+        indexX = parseInt(indexX);
+        indexY = parseInt(indexY);
+
+        let X = Array.prototype.indexOf.call(markedPiece.parentNode.children, markedPiece) - 1;
+        let Y = Math.abs(Array.prototype.indexOf.call(markedPiece.parentNode.parentNode.children, markedPiece.parentNode) + 9) - 9;
+        
+        currentY = Y - indexY;
+        currentX = X - indexX;
+
+        startX = X
+        startY = Y
+
+        if (lastMoveX != -1 && lastMoveY != -1) {
+            if (chessboard.length - lastMoveY - 1 >= 0 && chessboard.length - lastMoveY - 1 < chessboard.length)
+                if (lastMoveX >= 0 && lastMoveX < chessboard[chessboard.length - lastMoveY - 1].length)
+                    chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
+            if (chessboard.length - currentY - 1 >= 0 && chessboard.length - currentY - 1 < chessboard.length)
+                if (currentX >= 0 && currentX < chessboard[chessboard.length - currentY - 1].length)
+                    chessboard[chessboard.length - currentY - 1][currentX].style.boxShadow = 'inset 0 0 0 3px #78acd6';
+            markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+        }
+
+        lastMoveX = currentX;
+        lastMoveY = currentY;
+
+    }
+}
+window.onmousemove = (event) => {
+    if (activePiece != null) {
+        activePiece.style.left = `${event.clientX - u}px` 
+        activePiece.style.top =`${event.clientY - u}px`
+
+        indexX = (mouseX - event.clientX - offsetX) / (u * 2)
+        if (indexX > 0)
+            indexX++;
+        indexY = (mouseY - event.clientY - offsetY) / (u * 2)
+            if (indexY > 0)
+                indexY++;
+
+        indexX = parseInt(indexX);
+        indexY = parseInt(indexY);
+
+        let X = Array.prototype.indexOf.call(markedPiece.parentNode.children, markedPiece) - 1;
+        let Y = Math.abs(Array.prototype.indexOf.call(markedPiece.parentNode.parentNode.children, markedPiece.parentNode) + 9) - 9;
+        
+        currentY = Y - indexY;
+        currentX = X - indexX;
+
+        startX = X
+        startY = Y
+
+        if (lastMoveX != -1 && lastMoveY != -1) {
+            if (chessboard.length - lastMoveY - 1 >= 0 && chessboard.length - lastMoveY - 1 < chessboard.length)
+                if (lastMoveX >= 0 && lastMoveX < chessboard[chessboard.length - lastMoveY - 1].length)
+                    chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
+            if (chessboard.length - currentY - 1 >= 0 && chessboard.length - currentY - 1 < chessboard.length)
+                if (currentX >= 0 && currentX < chessboard[chessboard.length - currentY - 1].length)
+                    chessboard[chessboard.length - currentY - 1][currentX].style.boxShadow = 'inset 0 0 0 3px #78acd6';
+            markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+        }
+
+        lastMoveX = currentX;
+        lastMoveY = currentY;
+
+        // LOG IN CASE OF PROBLEMS
+        //console.log(startX, startY)
+        //console.log(currentX, currentY)
+    }
+}
+
+window.onload = () => {
+    // init 
+    let chessboardtable = document.querySelector('tbody');
+    let pieces = chessboardtable.querySelectorAll('div');
+
+    chessboardtable.querySelectorAll('th').forEach(e => {
+        e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
+        e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
+    })
+    chessboardtable.querySelectorAll('td').forEach(e => {
+        e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
+        e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
+    })
+
+    for (let i = 0; i < pieces.length; i++) {
+        pieces[i].addEventListener('mousedown', (event) => { focusPiece(event) })
+        pieces[i].addEventListener('touchstart', (event) => { mobileFocusPiece(event) })
+    }
+
+    for (let i = 0; i < chessboardtable.children.length - 1; i++) {
+        chessboard.push([]);
+        for (let j = 1; j < chessboardtable.children[i].children.length; j++) {
+            chessboard[chessboard.length - 1].push(chessboardtable.children[i].children[j])
+            chessboardtable.children[i].children[j].addEventListener('contextmenu', (event) => { event.preventDefault(); warnCase(event) })
+            chessboardtable.children[i].children[j].addEventListener('click', (event) => { stopWarn(event) })
+        }
+    }
+
+    chessboard = chessboard.reverse()
+
+    for (let i = 0; i < chessboard.length; i++) {
+        for (let j = 0; j < chessboard[i].length; j++) {
+            chessboard[i][j].style.width = `${2 * u}px`
+            chessboard[i][j].style.height = `${2 * u}px`
+        }
+    }
+}
+</script>

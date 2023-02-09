@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Chessboard from '../components/Chessboard.astro';
+---
+
+<Layout title="Welcome to eChess">
+	<main>
+        <article>
+            <h2>Welcome to the eChess official website</h2>
+            <p>eChess is a free and <a href="https://github.com/PCE-Engine">open-source</a> solution to play chess with friends, create tournaments, use classrooms and play against bots. In the case where you wish to install eChess Desktop on your station, go to the <a href="#download">download</a> section. If you want to become a sponsor, go to the <a href="/sponsor">sponsor</a> page.</p>
+        </article>
+        <div>
+            <article>
+                <h3>Website</h3>
+                <p>The eChess website, use PCE Engine for all the chess rules with a fully customosable frontend and implementation of StockFish API for game analitics. Here you have an example of eChess chessboard that you can use as a component in your project.</p>
+
+                <Chessboard />
+            </article>
+            <article>
+                <h3>PCE Engine</h3>
+            </article>
+            <article>
+                <h3>StockFish API</h3>
+            </article>
+            <article>
+                <h3>Creators</h3>
+            </article>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    body {
+        background: #051b11;
+        color: #eee;
+    }
+    main {
+        padding: 20px;
+    }
+    main > div {
+        margin-top: 30px;
+
+        display: grid;
+        gap: 40px;
+        justify-content: center;
+        grid-template-columns: repeat(auto-fill, 400px);
+    }
+    h3 {
+        margin-bottom: 6px;
+    }
+    h2 {
+        margin-bottom: 7px;
+    }
+</style>
