@@ -4,51 +4,90 @@ import Chessboard from '../components/Chessboard.astro';
 ---
 
 <Layout title="Welcome to eChess">
-	<main>
-        <article>
-            <h2>Welcome to the eChess official website</h2>
-            <p>eChess is a free and <a href="https://github.com/PCE-Engine">open-source</a> solution to play chess with friends, create tournaments, use classrooms and play against bots. In the case where you wish to install eChess Desktop on your station, go to the <a href="#download">download</a> section. If you want to become a sponsor, go to the <a href="/sponsor">sponsor</a> page.</p>
-        </article>
-        <div>
-            <article>
-                <h3>Website</h3>
-                <p>The eChess website, use PCE Engine for all the chess rules with a fully customosable frontend and implementation of StockFish API for game analitics. Here you have an example of eChess chessboard that you can use as a component in your project.</p>
-
-                <Chessboard />
-            </article>
-            <article>
-                <h3>PCE Engine</h3>
-            </article>
-            <article>
-                <h3>StockFish API</h3>
-            </article>
-            <article>
-                <h3>Creators</h3>
-            </article>
+    <div id="layout">
+        <div id="cursor-box">
+            <div id="cursor"></div>
         </div>
-    </main>
+        <nav>
+            <div><img src="/logo.png"><h1>eChess</h1></div>
+        </nav>
+    </div>
 </Layout>
 
 <style>
-    body {
-        background: #051b11;
-        color: #eee;
+    @import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
+
+    #layout {
+        position: absolute;
+        min-height: 100%;
+        min-width: 100%;
+        display: grid;
+        grid-template-rows: 140px 1fr 50px;
     }
-    main {
+
+    body {
+        background: #011109;
+        color: #eee;
+        position: relative;
+    }
+    h1 {
+        font-family: 'PT Serif', serif;
+        font-size: 60px;
+    }
+    nav {
+        display: flex;
+        justify-content: center;
         padding: 20px;
     }
-    main > div {
-        margin-top: 30px;
-
-        display: grid;
-        gap: 40px;
-        justify-content: center;
-        grid-template-columns: repeat(auto-fill, 400px);
+    nav > div {
+        display: flex;
+        gap: 30px;
     }
-    h3 {
-        margin-bottom: 6px;
+    nav img {
+        max-height: calc(100% - 10px);
     }
-    h2 {
-        margin-bottom: 7px;
+    @media screen and (max-width: 500px) {
+        nav img {
+            display: none;
+        }
     }
 </style>
+
+<style>
+    #cursor-box {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+    #cursor {
+        height: 50px;
+        width: 42px;
+        position: absolute;
+        background: url('/cursor.svg');
+        background-size: 100% 100%;
+        top: -100%;
+    }
+</style>
+<style is:global>
+    * {
+        cursor: none;
+    }
+    ::selection {
+        color: #011109;
+        background: #eee;
+    }
+</style>
+<script>
+    window.onload = () => {
+        if (!(('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))) {
+            window.onmousemove = (event) => {
+                const cursor = document.getElementById('cursor');
+                let Y = event.clientY > window.innerHeight - 52 ? window.innerHeight - 52 : event.clientY;
+                let X = event.clientX > window.innerWidth - 44 ? window.innerWidth - 44 : event.clientX; 
+                cursor.style.top = `${Y}px`
+                cursor.style.left = `${X}px`
+            }
+        }
+    }
+</script>
