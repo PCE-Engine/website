@@ -218,7 +218,7 @@ function focusPiece(event) {
         offsetX = event.offsetX;
         offsetY = event.offsetY;
 
-        activePiece.style.position = 'absolute'
+        activePiece.style.position = 'fixed'
         activePiece.style.left = `${event.clientX - u}px` 
         activePiece.style.top =`${event.clientY - u}px`
         activePiece.style.height = `${2 * u}px` 
@@ -248,7 +248,7 @@ function mobileFocusPiece(event) {
             offsetY = (event.touches[0].clientY - window.pageYOffset - rect.top)
             
     
-            activePiece.style.position = 'absolute'
+            activePiece.style.position = 'fixed'
             activePiece.style.left = `${mouseX - u}px` 
             activePiece.style.top =`${mouseY - u}px`
             activePiece.style.height = `${2 * u}px` 
