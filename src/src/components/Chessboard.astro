@@ -244,9 +244,11 @@ function mobileFocusPiece(event) {
             mouseY = event.touches[0].clientY;
 
             let rect = event.target.getBoundingClientRect()
-            offsetX = (event.touches[0].clientX - window.pageXOffset - rect.left)
-            offsetY = (event.touches[0].clientY - window.pageYOffset - rect.top)
-            
+            offsetX = (event.touches[0].clientX /*- window.pageXOffset*/ - rect.left)
+            offsetY = (event.touches[0].clientY /*- window.pageYOffset*/ - rect.top)
+
+            console.log(event.touches[0].clientY, window.pageYOffset, rect.top)       
+            console.log(event.touches[0].clientX, window.pageXOffset, rect.left)            
     
             activePiece.style.position = 'fixed'
             activePiece.style.left = `${mouseX - u}px` 
