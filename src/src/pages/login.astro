@@ -11,8 +11,8 @@ import Chessboard from '../components/Chessboard.astro';
         <main>
             <div id="form-container">
                 <div>
-                    <div class="underline" onclick="((e) => { Object.values(e.target.parentElement.children).forEach(el => { el.classList.remove('underline') }); e.target.classList.add('underline'); })(arguments[0]); document.querySelector('#register').classList.remove('active')">Login</div>
-                    <div onclick="((e) => { Object.values(e.target.parentElement.children).forEach(el => { el.classList.remove('underline') }); e.target.classList.add('underline'); document.querySelector('#register').classList.add('active') })(arguments[0])">Register</div>
+                    <div class="underline" onclick="((e) => { Object.values(e.target.parentElement.children).forEach(el => { el.classList.remove('underline') }); e.target.classList.add('underline'); })(arguments[0]); document.querySelector('#login').classList.add('active'); document.querySelector('#register').classList.remove('active')">Login</div>
+                    <div onclick="((e) => { Object.values(e.target.parentElement.children).forEach(el => { el.classList.remove('underline') }); e.target.classList.add('underline'); document.querySelector('#register').classList.add('active'); document.querySelector('#login').classList.remove('active') })(arguments[0])">Register</div>
                 </div>
                 <div>
                     <form id="register" action="">
@@ -20,13 +20,17 @@ import Chessboard from '../components/Chessboard.astro';
                             <h2>Register</h2>
                             <div>
                                 <label>Username</label><input /> 
+                            </div>
+                            <div>
                                 <label>E-mail</label><input /> 
                             </div>
                             <div>
                                 <label>Password</label><input type="password" /> 
-                                <label>Confirm password</label><input type="password" /> 
                             </div>
                             <div>
+                                <label>Confirm password</label><input type="password" /> 
+                            </div>
+                            <div class="horizontal">
                                 <label>Newsletter</label><input type="checkbox" /> 
                             </div>
                             <div>
@@ -34,16 +38,17 @@ import Chessboard from '../components/Chessboard.astro';
                             </div>
                         </div>
                     </form>
-                    <form id="login" action="">
+                    <form id="login" class="active" action="">
                         <div>
                             <h2>Login</h2>
                             <div>
                                 <label>Username or e-mail</label><input /> 
                             </div>
                             <div>
-                                <label>Password</label><input type="password" /> 
+                                <label>Password</label>
+                                <div style="display: flex;"><input type="password" /><span class="material-symbols-outlined">visibility</span></div>
                             </div>
-                            <div>
+                            <div class="horizontal">
                                 <label>Remember me</label><input type="checkbox" /> 
                             </div>
                             <div>
@@ -109,7 +114,9 @@ import Chessboard from '../components/Chessboard.astro';
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        max-width: 700px;
+        max-width: 500px;
+        padding-left: 30px;
+        padding-right: 30px;
     }
     #form-container {
         display: grid;
@@ -134,14 +141,32 @@ import Chessboard from '../components/Chessboard.astro';
     .underline {
         text-decoration: underline;
     }
+
     .active {
-        z-index: 2;
+        visibility: visible !important;
+    }
+    #register, #login {
+        visibility: hidden;
     }
     form {
         position: absolute;
         background: #011109;
         width: 100%;
         height: 100%;
+    }
+
+    form > div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    form > div > div {
+        display: flex;
+        flex-direction: column;
+    }
+    form > div > .horizontal {
+        flex-direction: row;
     }
 
     footer {
