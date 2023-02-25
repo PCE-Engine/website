@@ -2,7 +2,7 @@
 const {chessclass} = Astro.props
 ---
 
-<table class:list={[chessclass]} class="board" data-theme="default">
+<table class:list={[chessclass, "board"]} data-theme="default">
     <tbody>
         <tr>
             <th>8</th>
@@ -175,107 +175,149 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
 }
 </style>
 <script define:vars={{ chessclass }}>
-{
-    let chessboard = [];
+    if (!window['chessboards'])
+        window['chessboards'] = {};
+    window['chessboards'][chessclass] = document.querySelector(`.${chessclass}`);
 
-    let u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth - 25) / 18;
-    window.onresize = (event) => {
-        u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth - 25) / 18;
-        for (let i = 0; i < chessboard.length; i++) {
-            for (let j = 0; j < chessboard[i].length; j++) {
-                chessboard[i][j].style.width = `${2 * u}px`
-                chessboard[i][j].style.height = `${2 * u}px`
-            }
-        }
-    }
+    // chessboard
+    document.querySelector(`.${chessclass}`).chessboard = [];
+    let chessboard = document.querySelector(`.${chessclass}`).chessboard;
 
-    let offsetX, offsetY;
-    let mouseX, mouseY;
+    // u unit
+    document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth - 25) / 18;
+    let u = document.querySelector(`.${chessclass}`).u;
 
-    let indexX, indexY;
+    document.querySelector(`.${chessclass}`).datas = { offsetX: 0, offsetY: 0, mouseX: 0, mouseY: 0, indexX: 0, indexY: 0, startX: 0, startY: 0, currentX: 0, currentY: 0, lastMoveX: -1, lastMoveY: -1, activePiece: null, markedPiece: null, warnCases: [], move: true }
 
-    let startX, startY;     // TO SEND AS START POS
-    let currentX, currentY; // TO SEND AS FINAL POS
+    let offsetX = document.querySelector(`.${chessclass}`).datas.offsetX, offsetY = document.querySelector(`.${chessclass}`).datas.offsetY;
+    let mouseX = document.querySelector(`.${chessclass}`).datas.mouseX, mouseY = document.querySelector(`.${chessclass}`).datas.mouseY;
 
-    let lastMoveX = -1, lastMoveY = -1;
+    let indexX = document.querySelector(`.${chessclass}`).datas.indexX, indexY = document.querySelector(`.${chessclass}`).datas.indexY;
 
-    let activePiece, markedPiece;
+    let startX = document.querySelector(`.${chessclass}`).datas.startX, startY = document.querySelector(`.${chessclass}`).datas.startY;     // TO SEND AS START POS
+    let currentX = document.querySelector(`.${chessclass}`).datas.currentX, currentY = document.querySelector(`.${chessclass}`).datas.currentY; // TO SEND AS FINAL POS
 
-    let warnCases = [];
+    let lastMoveX = document.querySelector(`.${chessclass}`).datas.lastMoveX, lastMoveY = document.querySelector(`.${chessclass}`).datas.lastMoveY;
 
-    let move = true;
+    let activePiece = document.querySelector(`.${chessclass}`).datas.activePiece, markedPiece = document.querySelector(`.${chessclass}`).datas.markedPiece;
+
+    let warnCases = document.querySelector(`.${chessclass}`).datas.warnCases;
+
+    let move = document.querySelector(`.${chessclass}`).datas.move;
 
     function focusPiece(event) {
+        let t = event.target;    
+        let chessboardel;
+
+        while (!t.classList.contains('board')) 
+            t = t.parentElement;
+        
+        Object.assign([], t.classList).forEach(el => {
+            if (el != 'board') {
+                if (window['chessboards'][el]) {
+                    window['activeboard'] = window['chessboards'][el];
+                    chessboardel = window['chessboards'][el];
+                }
+            }
+        })
+
         if (
-        ((move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+        ((chessboardel.datas.move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
         || 
-        (!move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
+        (!chessboardel.datas.move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
         && event.which == 1
         ) {
-            if (markedPiece)
-                markedPiece.style.boxShadow =  '';
+            if (chessboardel.datas.markedPiece)
+                chessboardel.datas.markedPiece.style.boxShadow =  '';
 
-            activePiece = event.target;
+            chessboardel.datas.activePiece = event.target;
 
-            mouseX = event.clientX;
-            mouseY = event.clientY;
+            chessboardel.datas.mouseX = event.clientX;
+            chessboardel.datas.mouseY = event.clientY;
 
-            offsetX = event.offsetX;
-            offsetY = event.offsetY;
+            chessboardel.datas.offsetX = event.offsetX;
+            chessboardel.datas.offsetY = event.offsetY;
 
-            activePiece.style.position = 'fixed'
-            activePiece.style.left = `${event.clientX - u}px` 
-            activePiece.style.top =`${event.clientY - u}px`
-            activePiece.style.height = `${2 * u}px` 
-            activePiece.style.width = `${2 * u}px` 
+            chessboardel.datas.activePiece.style.position = 'fixed'
+            chessboardel.datas.activePiece.style.left = `${event.clientX - u}px` 
+            chessboardel.datas.activePiece.style.top =`${event.clientY - u}px`
+            chessboardel.datas.activePiece.style.height = `${2 * u}px` 
+            chessboardel.datas.activePiece.style.width = `${2 * u}px` 
 
-            markedPiece = event.target.parentElement;
-            markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+            chessboardel.datas.markedPiece = event.target.parentElement;
+            chessboardel.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
             // call function get moves
         }
     }
     function mobileFocusPiece(event) {
+        let t = event.target;    
+        let chessboardel;
+
+        while (!t.classList.contains('board')) 
+            t = t.parentElement;
+        
+        Object.assign([], t.classList).forEach(el => {
+            if (el != 'board') {
+                if (window['chessboards'][el]) {
+                    window['activeboard'] = window['chessboards'][el];
+                    chessboardel = window['chessboards'][el];
+                }
+            }
+        })
+
         if (
-            ((move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
+            ((chessboardel.datas.move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
             || 
-            (!move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
+            (!chessboardel.datas.move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
             ) {
-                if (markedPiece)
-                    markedPiece.style.boxShadow =  '';
+                if (chessboardel.datas.markedPiece)
+                    chessboardel.datas.markedPiece.style.boxShadow =  '';
         
-                activePiece = event.target;
+                chessboardel.datas.activePiece = event.target;
         
-                mouseX = event.touches[0].clientX;
-                mouseY = event.touches[0].clientY;
+                chessboardel.datas.mouseX = event.touches[0].clientX;
+                chessboardel.datas.mouseY = event.touches[0].clientY;
 
                 let rect = event.target.getBoundingClientRect()
-                offsetX = (event.touches[0].clientX /*- window.pageXOffset*/ - rect.left)
-                offsetY = (event.touches[0].clientY /*- window.pageYOffset*/ - rect.top)
-
-                console.log(event.touches[0].clientY, window.pageYOffset, rect.top)       
-                console.log(event.touches[0].clientX, window.pageXOffset, rect.left)            
+                chessboardel.datas.offsetX = (event.touches[0].clientX /*- window.pageXOffset*/ - rect.left)
+                chessboardel.datas.offsetY = (event.touches[0].clientY /*- window.pageYOffset*/ - rect.top)      
         
-                activePiece.style.position = 'fixed'
-                activePiece.style.left = `${mouseX - u}px` 
-                activePiece.style.top =`${mouseY - u}px`
-                activePiece.style.height = `${2 * u}px` 
-                activePiece.style.width = `${2 * u}px` 
+                chessboardel.datas.activePiece.style.position = 'fixed'
+                chessboardel.datas.activePiece.style.left = `${mouseX - u}px` 
+                chessboardel.datas.activePiece.style.top =`${mouseY - u}px`
+                chessboardel.datas.activePiece.style.height = `${2 * u}px` 
+                chessboardel.datas.activePiece.style.width = `${2 * u}px` 
         
-                markedPiece = event.target.parentElement;
-                markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+                chessboardel.datas.markedPiece = event.target.parentElement;
+                chessboardel.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
                 // call function get moves
             }
     }
 
     // warn cases
     function warnCase(event) {
+        let t = event.target;    
+        let chessboardel;
+
+        while (!t.classList.contains('board')) 
+            t = t.parentElement;
+        
+        Object.assign([], t.classList).forEach(el => {
+            if (el != 'board') {
+                if (window['chessboards'][el]) {
+                    window['activeboard'] = window['chessboards'][el];
+                    chessboardel = window['chessboards'][el];
+                }
+            }
+        })
+
         let target = event.target;
         if (event.target.tagName == 'DIV')
             target = target.parentElement;
 
-        let targetIndex = Array.prototype.indexOf.call(warnCases, target);
+        let targetIndex = Array.prototype.indexOf.call(chessboardel.datas.warnCases, target);
         if (targetIndex >= 0) {
-            warnCases.splice(targetIndex, 1);
+            chessboardel.datas.warnCases.splice(targetIndex, 1);
             target.style.background = ''
         }
         else {
@@ -287,83 +329,105 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             if (X % 2 == Y % 2) 
             target.style.background = '#f06948'
                     
-            warnCases.push(target);
+            chessboardel.datas.warnCases.push(target);
         }
     }
     function stopWarn(event) {
+        let t = event.target;    
+        let chessboardel;
+
+        while (!t.classList.contains('board')) 
+            t = t.parentElement;
+        
+        Object.assign([], t.classList).forEach(el => {
+            if (el != 'board') {
+                if (window['chessboards'][el]) {
+                    window['activeboard'] = window['chessboards'][el];
+                    chessboardel = window['chessboards'][el];
+                }
+            }
+        })
+
         if (event.target.children.length == 0 && event.target.tagName != 'DIV') {
             // delete marker
-            while (warnCases.length > 0) {
-                warnCases[0].style.background = ''
-                warnCases.shift()
+            while (chessboardel.datas.warnCases.length > 0) {
+                chessboardel.datas.warnCases[0].style.background = ''
+                chessboardel.datas.warnCases.shift()
             }
         }
     }
 
-    window.onmouseup = () => { 
-        if (activePiece) {
-            activePiece.style.position = `initial`
-            activePiece.style.height = `` 
-            activePiece.style.width = `` 
+    window['chessboards'][chessclass].onmouseup = () => { 
+        let chessboardel = window['activeboard']
+
+        try {
+            if (chessboardel.datas.activePiece) {
+                chessboardel.datas.activePiece.style.position = `initial`
+                chessboardel.datas.activePiece.style.height = `` 
+                chessboardel.datas.activePiece.style.width = `` 
+            }
+
+            // verification
+            if ((true) && chessboardel.datas.activePiece) {
+                console.log(chessboardel.datas)
+                if ((chessboardel.datas.currentX != chessboardel.datas.startX || chessboardel.datas.currentY != chessboardel.datas.startY) && (chessboardel.length - chessboardel.datas.currentY - 1 < chessboardel.chessboard.length && chessboardel.chessboard.length - chessboardel.datas.currentY - 1 >= 0) && (chessboardel.datas.currentX < chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1].length && chessboardel.datas.currentX >= 0)) {
+                    chessboardel.datas.activePiece.parentElement.removeChild(chessboardel.datas.activePiece);
+                    chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1][chessboardel.datas.currentX].innerHTML = ''
+                    chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1][chessboardel.datas.currentX].appendChild(chessboardel.datas.activePiece);
+
+                    if (chessboardel.datas.markedPiece)
+                        chessboardel.datas.markedPiece.style.boxShadow =  '';
+
+                    // delete marker
+                    while (chessboardel.datas.warnCases.length > 0) {
+                        chessboardel.datas.warnCases[0].style.background = ''
+                        chessboardel.datas.warnCases.shift()
+                    }
+
+                    chessboardel.datas.move = !chessboardel.datas.move
+                }
+            }
+
+            chessboardel.datas.activePiece = null; 
+            chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1][chessboardel.datas.lastMoveX].style.boxShadow = '';
+            [chessboardel.datas.currentY, chessboardel.datas.currentX, chessboardel.datas.startY, chessboardel.datas.startX, chessboardel.datas.lastMoveY, chessboardel.datas.lastMoveX] = [0, 0, 0, 0, 0, 0]
+        } catch {}
+    }
+    window['chessboards'][chessclass].ontouchend = () => {
+        let chessboardel = window['activeboard']
+
+        if (chessboardel.datas.activePiece) {
+            chessboardel.datas.activePiece.style.position = `initial`
+            chessboardel.datas.activePiece.style.height = `` 
+            chessboardel.datas.activePiece.style.width = `` 
         }
 
         // verification
-        if ((true) && activePiece) {
-            if ((currentX != startX || currentY != startY) && (chessboard.length - currentY - 1 < chessboard.length && chessboard.length - currentY - 1 >= 0) && (currentX < chessboard[chessboard.length - currentY - 1].length && currentX >= 0)) {
-                activePiece.parentElement.removeChild(activePiece);
-                chessboard[chessboard.length - currentY - 1][currentX].innerHTML = ''
-                chessboard[chessboard.length - currentY - 1][currentX].appendChild(activePiece);
+        if ((true) && chessboardel.datas.activePiece) {
+            if ((chessboardel.datas.currentX != chessboardel.datas.startX || chessboardel.datas.currentY != chessboardel.datas.startY) && (chessboardel.chessboard.length - chessboardel.datas.currentY - 1 < chessboardel.chessboard.length && chessboardel.chessboard.length - chessboardel.datas.currentY - 1 >= 0) && (chessboardel.datas.currentX < chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1].length && chessboardel.datas.currentX >= 0)) {
+                chessboardel.datas.activePiece.parentElement.removeChild(chessboardel.datas.activePiece);
+                chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1][chessboardel.datas.currentX].innerHTML = ''
+                chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1][chessboardel.datas.currentX].appendChild(chessboardel.datas.activePiece);
 
-                if (markedPiece)
-                    markedPiece.style.boxShadow =  '';
+                if (chessboardel.datas.markedPiece)
+                    chessboardel.datas.markedPiece.style.boxShadow =  '';
 
                 // delete marker
-                while (warnCases.length > 0) {
-                    warnCases[0].style.background = ''
-                    warnCases.shift()
+                while (chessboardel.datas.warnCases.length > 0) {
+                    chessboardel.datas.warnCases[0].style.background = ''
+                    chessboardel.datas.warnCases.shift()
                 }
 
-                move = !move
+                chessboardel.datas.move = !chessboardel.datas.move
             }
         }
 
-        activePiece = null; 
-        chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
-        [currentY, currentX, startY, startX, lastMoveY, lastMoveX] = [0, 0, 0, 0, 0, 0]
-    }
-    window.ontouchend = () => {
-        if (activePiece) {
-            activePiece.style.position = `initial`
-            activePiece.style.height = `` 
-            activePiece.style.width = `` 
-        }
-
-        // verification
-        if ((true) && activePiece) {
-            if ((currentX != startX || currentY != startY) && (chessboard.length - currentY - 1 < chessboard.length && chessboard.length - currentY - 1 >= 0) && (currentX < chessboard[chessboard.length - currentY - 1].length && currentX >= 0)) {
-                activePiece.parentElement.removeChild(activePiece);
-                chessboard[chessboard.length - currentY - 1][currentX].innerHTML = ''
-                chessboard[chessboard.length - currentY - 1][currentX].appendChild(activePiece);
-
-                if (markedPiece)
-                    markedPiece.style.boxShadow =  '';
-
-                // delete marker
-                while (warnCases.length > 0) {
-                    warnCases[0].style.background = ''
-                    warnCases.shift()
-                }
-
-                move = !move
-            }
-        }
-
-        activePiece = null; 
-        chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
-        [currentY, currentX, startY, startX, lastMoveY, lastMoveX] = [0, 0, 0, 0, 0, 0]
+        chessboardel.datas.activePiece = null; 
+        chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1][chessboardel.datas.lastMoveX].style.boxShadow = '';
+        [chessboardel.datas.currentY, chessboardel.datas.currentX, chessboardel.datas.startY, chessboardel.datas.startX, chessboardel.datas.lastMoveY, chessboardel.datas.lastMoveX] = [0, 0, 0, 0, 0, 0]
     }
 
-    window.ontouchmove = (event) => {
+    window['chessboards'][chessclass].ontouchmove = (event) => {
         if (activePiece != null) {
             activePiece.style.left = `${event.touches[0].clientX - u}px` 
             activePiece.style.top =`${event.touches[0].clientY - u}px`
@@ -402,85 +466,91 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
 
         }
     }
-    window.onmousemove = (event) => {
-        if (activePiece != null) {
-            activePiece.style.left = `${event.clientX - u}px` 
-            activePiece.style.top =`${event.clientY - u}px`
+    window['chessboards'][chessclass].onmousemove = (event) => {  
+        try {
+            let chessboardel = window['activeboard']
+            console.log(chessboardel.datas)
+        
+            if (chessboardel.datas.activePiece != null) {
+                chessboardel.datas.activePiece.style.left = `${event.clientX - u}px` 
+                chessboardel.datas.activePiece.style.top =`${event.clientY - u}px`
 
-            indexX = (mouseX - event.clientX - offsetX) / (u * 2)
-            if (indexX > 0)
-                indexX++;
-            indexY = (mouseY - event.clientY - offsetY) / (u * 2)
-                if (indexY > 0)
-                    indexY++;
+                chessboardel.datas.indexX = (chessboardel.datas.mouseX - event.clientX - chessboardel.datas.offsetX) / (chessboardel.u * 2)
+                if (chessboardel.datas.indexX > 0)
+                    chessboardel.datas.indexX++;
+                chessboardel.datas.indexY = (chessboardel.datas.mouseY - event.clientY - chessboardel.datas.offsetY) / (chessboardel.u * 2)
+                    if (chessboardel.datas.indexY > 0)
+                        chessboardel.datas.indexY++;
 
-            indexX = parseInt(indexX);
-            indexY = parseInt(indexY);
+                chessboardel.datas.indexX = parseInt(chessboardel.datas.indexX);
+                chessboardel.datas.indexY = parseInt(chessboardel.datas.indexY);
 
-            let X = Array.prototype.indexOf.call(markedPiece.parentNode.children, markedPiece) - 1;
-            let Y = Math.abs(Array.prototype.indexOf.call(markedPiece.parentNode.parentNode.children, markedPiece.parentNode) + 9) - 9;
-            
-            currentY = Y - indexY;
-            currentX = X - indexX;
+                let X = Array.prototype.indexOf.call(chessboardel.datas.markedPiece.parentNode.children, chessboardel.datas.markedPiece) - 1;
+                let Y = Math.abs(Array.prototype.indexOf.call(chessboardel.datas.markedPiece.parentNode.parentNode.children, chessboardel.datas.markedPiece.parentNode) + 9) - 9;
 
-            startX = X
-            startY = Y
+                chessboardel.datas.currentY = Y - chessboardel.datas.indexY;
+                chessboardel.datas.currentX = X - chessboardel.datas.indexX;
 
-            if (lastMoveX != -1 && lastMoveY != -1) {
-                if (chessboard.length - lastMoveY - 1 >= 0 && chessboard.length - lastMoveY - 1 < chessboard.length)
-                    if (lastMoveX >= 0 && lastMoveX < chessboard[chessboard.length - lastMoveY - 1].length)
-                        chessboard[chessboard.length - lastMoveY - 1][lastMoveX].style.boxShadow = '';
-                if (chessboard.length - currentY - 1 >= 0 && chessboard.length - currentY - 1 < chessboard.length)
-                    if (currentX >= 0 && currentX < chessboard[chessboard.length - currentY - 1].length)
-                        chessboard[chessboard.length - currentY - 1][currentX].style.boxShadow = 'inset 0 0 0 3px #78acd6';
-                markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+                chessboardel.datas.startX = X
+                chessboardel.datas.startY = Y
+
+                console.log(chessboardel.datas.currentX)
+
+                if (chessboardel.datas.lastMoveX != -1 && chessboardel.datas.lastMoveY != -1) {
+                    if (chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1 >= 0 && chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1 < chessboardel.chessboard.length)
+                        if (chessboardel.datas.lastMoveX >= 0 && chessboardel.datas.lastMoveX < chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1].length)
+                            chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.lastMoveY - 1][chessboardel.datas.lastMoveX].style.boxShadow = '';
+                    if (chessboardel.chessboard.length - chessboardel.datas.currentY - 1 >= 0 && chessboardel.chessboard.length - chessboardel.datas.currentY - 1 < chessboardel.chessboard.length)
+                        if (chessboardel.datas.currentX >= 0 && chessboardel.datas.currentX < chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1].length)
+                            chessboardel.chessboard[chessboardel.chessboard.length - chessboardel.datas.currentY - 1][chessboardel.datas.currentX].style.boxShadow = 'inset 0 0 0 3px #78acd6';
+                    chessboardel.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+                }
+
+                chessboardel.datas.lastMoveX = chessboardel.datas.currentX;
+                chessboardel.datas.lastMoveY = chessboardel.datas.currentY;
+
+
+                console.log(chessboardel.datas)
+                // LOG IN CASE OF PROBLEMS
+                //console.log(startX, startY)
+                //console.log(currentX, currentY)
             }
+        } catch {}
+    }
 
-            lastMoveX = currentX;
-            lastMoveY = currentY;
+    let chessboardtable = document.querySelector(`.${chessclass}`).querySelector('tbody');
+    let pieces = chessboardtable.querySelectorAll('div');
 
-            // LOG IN CASE OF PROBLEMS
-            //console.log(startX, startY)
-            //console.log(currentX, currentY)
+    chessboardtable.querySelectorAll('th').forEach(e => {
+        e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
+        e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
+    })
+    chessboardtable.querySelectorAll('td').forEach(e => {
+        e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
+        e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
+    })
+
+    for (let i = 0; i < pieces.length; i++) {
+        pieces[i].addEventListener('mousedown', (event) => { focusPiece(event) })
+        pieces[i].addEventListener('touchstart', (event) => { mobileFocusPiece(event) })
+    }
+
+    for (let i = 0; i < chessboardtable.children.length - 1; i++) {
+        chessboard.push([]);
+        for (let j = 1; j < chessboardtable.children[i].children.length; j++) {
+            chessboard[chessboard.length - 1].push(chessboardtable.children[i].children[j])
+            chessboardtable.children[i].children[j].addEventListener('contextmenu', (event) => { event.preventDefault(); warnCase(event) })
+            chessboardtable.children[i].children[j].addEventListener('click', (event) => { stopWarn(event) })
         }
     }
 
-    window.onload = () => {
-        // init 
-        let chessboardtable = document.querySelector('tbody');
-        let pieces = chessboardtable.querySelectorAll('div');
+    chessboard = chessboard.reverse()
 
-        chessboardtable.querySelectorAll('th').forEach(e => {
-            e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
-            e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
-        })
-        chessboardtable.querySelectorAll('td').forEach(e => {
-            e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
-            e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
-        })
-
-        for (let i = 0; i < pieces.length; i++) {
-            pieces[i].addEventListener('mousedown', (event) => { focusPiece(event) })
-            pieces[i].addEventListener('touchstart', (event) => { mobileFocusPiece(event) })
-        }
-
-        for (let i = 0; i < chessboardtable.children.length - 1; i++) {
-            chessboard.push([]);
-            for (let j = 1; j < chessboardtable.children[i].children.length; j++) {
-                chessboard[chessboard.length - 1].push(chessboardtable.children[i].children[j])
-                chessboardtable.children[i].children[j].addEventListener('contextmenu', (event) => { event.preventDefault(); warnCase(event) })
-                chessboardtable.children[i].children[j].addEventListener('click', (event) => { stopWarn(event) })
-            }
-        }
-
-        chessboard = chessboard.reverse()
-
-        for (let i = 0; i < chessboard.length; i++) {
-            for (let j = 0; j < chessboard[i].length; j++) {
-                chessboard[i][j].style.width = `${2 * u}px`
-                chessboard[i][j].style.height = `${2 * u}px`
-            }
+    for (let i = 0; i < chessboard.length; i++) {
+        for (let j = 0; j < chessboard[i].length; j++) {
+            chessboard[i][j].style.width = `${2 * u}px`
+            chessboard[i][j].style.height = `${2 * u}px`
         }
     }
-}
+
 </script>
