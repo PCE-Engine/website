@@ -1,8 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Chessboard from '../components/Chessboard.astro';
+import ChessboardResize from '../components/ChessboardResize.astro';
 ---
 
+<ChessboardResize />
 <Layout title="Welcome to Astro.">
-	<Chessboard />
+	<div style="width: 500px; position: absolute; top: 150px;"><Chessboard chessclass="board1" /></div>
+	<div style="width: 500px; position: absolute; top: 1050px;"><Chessboard chessclass="board2" /></div>
 </Layout>
