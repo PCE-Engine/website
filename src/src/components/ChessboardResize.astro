@@ -1,0 +1,18 @@
+<script>
+    if (!window['chessboards'])
+        window['chessboards'] = {};
+
+    window.onresize = () => {
+        window['chessboards'].forEach(chessboard => {
+            chessboard.u = (chessboard.parentElement.clientWidth - 25) / 18;
+            let u = chessboard.u;
+
+            for (let i = 0; i < chessboard.length; i++) {
+                for (let j = 0; j < chessboard[i].length; j++) {
+                    chessboard[i][j].style.width = `${2 * u}px`
+                    chessboard[i][j].style.height = `${2 * u}px`
+                }
+            }
+        })
+    }
+</script>
