@@ -2,109 +2,123 @@
 const {chessclass} = Astro.props
 ---
 
-<table class:list={[chessclass, "board"]} data-theme="default">
-    <tbody>
-        <tr>
-            <th>8</th>
-            <td><div class="br"></div></td>
-            <td><div class="bn"></div></td>
-            <td><div class="bb"></div></td>
-            <td><div class="bq"></div></td>
-            <td><div class="bk"></div></td>
-            <td><div class="bb"></div></td>
-            <td><div class="bn"></div></td>
-            <td><div class="br"></div></td>
-        </tr>
-        <tr>
-            <th>7</th>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-            <td><div class="bp"></div></td>
-        </tr>
-        <tr>
-            <th>6</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>5</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>4</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>3</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>2</th>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-            <td><div class="wp"></div></td>
-        </tr>
-        <tr>
-            <th>1</th>
-            <td><div class="wr"></div></td>
-            <td><div class="wn"></div></td>
-            <td><div class="wb"></div></td>
-            <td><div class="wq"></div></td>
-            <td><div class="wk"></div></td>
-            <td><div class="wb"></div></td>
-            <td><div class="wn"></div></td>
-            <td><div class="wr"></div></td>
-        </tr>
-        <tr>
-            <th></th>
-            <th>a</th>
-            <th>b</th>
-            <th>c</th>
-            <th>d</th>
-            <th>e</th>
-            <th>f</th>
-            <th>g</th>
-            <th>h</th>
-        </tr>
-    </tbody>
-</table>
+<div style="width: 100%; aspect-ratio: 1 / 1;">
+    <table data-theme="default">
+        <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+    </table>
+    <table class:list={[chessclass, "board"]}>
+        <tbody>
+            <tr>
+                <th>8</th>
+                <td><div class="br"></div></td>
+                <td><div class="bn"></div></td>
+                <td><div class="bb"></div></td>
+                <td><div class="bq"></div></td>
+                <td><div class="bk"></div></td>
+                <td><div class="bb"></div></td>
+                <td><div class="bn"></div></td>
+                <td><div class="br"></div></td>
+            </tr>
+            <tr>
+                <th>7</th>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+                <td><div class="bp"></div></td>
+            </tr>
+            <tr>
+                <th>6</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>5</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>4</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+                <td><div class="wp"></div></td>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td><div class="wr"></div></td>
+                <td><div class="wn"></div></td>
+                <td><div class="wb"></div></td>
+                <td><div class="wq"></div></td>
+                <td><div class="wk"></div></td>
+                <td><div class="wb"></div></td>
+                <td><div class="wn"></div></td>
+                <td><div class="wr"></div></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>a</th>
+                <th>b</th>
+                <th>c</th>
+                <th>d</th>
+                <th>e</th>
+                <th>f</th>
+                <th>g</th>
+                <th>h</th>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
@@ -123,9 +137,14 @@ const {chessclass} = Astro.props
     --gothamthemeb: #b58863;
 }
 
+table {
+    border-collapse: collapse;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
 .board {
     border-spacing: 0;
-    border-collapse: collapse;
     font-family: 'Roboto', sans-serif;
 }
 .board th {
@@ -135,6 +154,7 @@ const {chessclass} = Astro.props
 .board td div {
     width: 100%;
     height: 100%;
+    z-index: 10;
 }    
 
 .br, .bn, .bb, .bq, .bk, .bp, .wr, .wn, .wb, .wq, .wk, .wp {
@@ -178,20 +198,30 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
     if (!window['chessboards'])
         window['chessboards'] = {};
     window['chessboards'][chessclass] = document.querySelector(`.${chessclass}`);
+    
+    window['chessboards'][chessclass].parentElement.querySelectorAll('table').forEach(table => {
+        table.addEventListener('contextmenu', (event) => { event.preventDefault(); })
+    })
 
     /*
     INITIALISATION
     */
+
     // chessboard
     document.querySelector(`.${chessclass}`).chessboard = [];
     let chessboard = document.querySelector(`.${chessclass}`).chessboard;
     // u unit
-    document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth - 25) / 18;
+    document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth) / 18;
     let u = document.querySelector(`.${chessclass}`).u;
     document.querySelector(`.${chessclass}`).datas = { offsetX: 0, offsetY: 0, mouseX: 0, mouseY: 0, indexX: 0, indexY: 0, startX: 0, startY: 0, currentX: 0, currentY: 0, lastMoveX: -1, lastMoveY: -1, activePiece: null, markedPiece: null, warnCases: [], move: true }
 
     let chessboardtable = document.querySelector(`.${chessclass}`).querySelector('tbody');
     let pieces = chessboardtable.querySelectorAll('div');
+
+    window['chessboards'][chessclass].parentElement.querySelectorAll('td').forEach(td => {
+        td.style.width = `${2 * u}px`
+        td.style.height = `${2 * u}px`
+    })
 
     /*
     DESKTOP
@@ -261,6 +291,18 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             // LOG IN CASE OF PROBLEMS
             //console.log(startX, startY)
             //console.log(currentX, currentY)
+        }
+
+        if (t.warnX > -1 && t.warnY > -1) {
+            let target = event.target;
+            if (target.tagName == 'DIV')
+                target = target.parentElement;
+
+            let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
+            let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+
+            //console.log(X, t.warnX)
+            //console.log(Y, t.warnY)
         }
     }
     window['chessboards'][chessclass].onmouseup = (event) => { 
@@ -398,31 +440,68 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
     /*
     WARN CASE
     */
-    function warnCase(event) {
+    function startWarnCase(event) {
         let t = event.target;
         while (!t.classList.contains('board'))
             t = t.parentElement;
-        
-        warnCases = t.datas.warnCases;
 
         let target = event.target;
         if (event.target.tagName == 'DIV')
             target = target.parentElement;
-        let targetIndex = Array.prototype.indexOf.call(warnCases, target);
-        if (targetIndex >= 0) {
-            warnCases.splice(targetIndex, 1);
-            target.style.background = ''
+
+        if (event.which == 3) {
+            t.warnX = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
+            t.warnY = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+            t.warnT = document.createElement('div');
+            t.parentElement.querySelector('table[data-theme]').appendChild(t.warnT)
+            console.log(t.parentElement.querySelector('table[data-theme]'))
+
+            if (t.arrows == null) 
+                t.arrows = {}
+        }
+    }
+    function endWarnCase(event) {
+        let t = event.target;
+        while (!t.classList.contains('board'))
+            t = t.parentElement;
+
+        warnCases = t.datas.warnCases;
+        let target = event.target;
+        if (event.target.tagName == 'DIV')
+            target = target.parentElement;
+
+        let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
+        let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+
+        if (X == t.warnX && Y == t.warnY) {
+            let ct = t.parentElement.querySelector('table[data-theme]').querySelectorAll('tr')[Y].querySelectorAll('td')[X]
+            let targetIndex = Array.prototype.indexOf.call(warnCases, ct);
+            if (targetIndex >= 0) {
+                warnCases.splice(targetIndex, 1);
+                ct.style.background = ''
+            }
+            else {
+                ct.style.background = '#db4e2c'            
+                if (X % 2 == Y % 2) 
+                    ct.style.background = '#f06948'
+                        
+                warnCases.push(ct);
+            }
+
+            t.parentElement.querySelector('table[data-theme]').removeChild(t.warnT)
+        }
+
+        if (t.arrows[`${X}${t.warnX}${Y}${t.warnY}`] != null) {
+            t.parentElement.querySelector('table[data-theme]').removeChild(t.warnT)
+            t.parentElement.querySelector('table[data-theme]').removeChild(t.arrows[`${X}${t.warnX}${Y}${t.warnY}`])
         }
         else {
-            target.style.background = '#db4e2c'
-            let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
-            let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
-            
-            if (X % 2 == Y % 2) 
-                target.style.background = '#f06948'
-                    
-            warnCases.push(target);
+            t.arrows[`${X}${t.warnX}${Y}${t.warnY}`] = t.warnT
         }
+
+        t.warnX = -1
+        t.warnY = -1
+        t.warnT = null
     }
     function stopWarn(event) {
         let t = event.target;
@@ -449,15 +528,16 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
     })
     for (let i = 0; i < pieces.length; i++) {
-        pieces[i].addEventListener('mousedown', (event) => { focusPiece(event) })
+        pieces[i].addEventListener('mousedown', (event) => { event.preventDefault(); focusPiece(event) })
         pieces[i].addEventListener('touchstart', (event) => { mobileFocusPiece(event) })
     }
     for (let i = 0; i < chessboardtable.children.length - 1; i++) {
         chessboard.push([]);
         for (let j = 1; j < chessboardtable.children[i].children.length; j++) {
             chessboard[chessboard.length - 1].push(chessboardtable.children[i].children[j])
-            chessboardtable.children[i].children[j].addEventListener('contextmenu', (event) => { event.preventDefault(); warnCase(event) })
-            chessboardtable.children[i].children[j].addEventListener('click', (event) => { stopWarn(event) })
+            chessboardtable.children[i].children[j].addEventListener('mousedown', (event) => { event.preventDefault(); startWarnCase(event) })
+            chessboardtable.children[i].children[j].addEventListener('mouseup', (event) => { event.preventDefault(); endWarnCase(event) })
+            chessboardtable.children[i].children[j].addEventListener('click', (event) => { event.preventDefault(); stopWarn(event) })
         }
     }
     chessboard = chessboard.reverse()
