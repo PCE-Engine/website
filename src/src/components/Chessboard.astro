@@ -1,5 +1,5 @@
 ---
-const {chessclass} = Astro.props
+const {chessclass, color} = Astro.props
 ---
 
 <div style="width: 100%; aspect-ratio: 1 / 1;">
@@ -18,8 +18,7 @@ const {chessclass} = Astro.props
     <table class:list={[chessclass, "board"]}>
         <tbody>
             <tr>
-                <th>8</th>
-                <td><div class="br"></div></td>
+                <td data-y-marker="8"><div class="br"></div></td>
                 <td><div class="bn"></div></td>
                 <td><div class="bb"></div></td>
                 <td><div class="bq"></div></td>
@@ -29,8 +28,7 @@ const {chessclass} = Astro.props
                 <td><div class="br"></div></td>
             </tr>
             <tr>
-                <th>7</th>
-                <td><div class="bp"></div></td>
+                <td data-y-marker="7"><div class="bp"></div></td>
                 <td><div class="bp"></div></td>
                 <td><div class="bp"></div></td>
                 <td><div class="bp"></div></td>
@@ -40,19 +38,7 @@ const {chessclass} = Astro.props
                 <td><div class="bp"></div></td>
             </tr>
             <tr>
-                <th>6</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>5</th>
-                <td></td>
+                <td data-y-marker="6"></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -62,19 +48,7 @@ const {chessclass} = Astro.props
                 <td></td>
             </tr>
             <tr>
-                <th>4</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td></td>
+                <td data-y-marker="5"></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -84,8 +58,27 @@ const {chessclass} = Astro.props
                 <td></td>
             </tr>
             <tr>
-                <th>2</th>
-                <td><div class="wp"></div></td>
+                <td data-y-marker="4"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td data-y-marker="3"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td data-y-marker="2"><div class="wp"></div></td>
                 <td><div class="wp"></div></td>
                 <td><div class="wp"></div></td>
                 <td><div class="wp"></div></td>
@@ -95,26 +88,14 @@ const {chessclass} = Astro.props
                 <td><div class="wp"></div></td>
             </tr>
             <tr>
-                <th>1</th>
-                <td><div class="wr"></div></td>
-                <td><div class="wn"></div></td>
-                <td><div class="wb"></div></td>
-                <td><div class="wq"></div></td>
-                <td><div class="wk"></div></td>
-                <td><div class="wb"></div></td>
-                <td><div class="wn"></div></td>
-                <td><div class="wr"></div></td>
-            </tr>
-            <tr>
-                <th></th>
-                <th>a</th>
-                <th>b</th>
-                <th>c</th>
-                <th>d</th>
-                <th>e</th>
-                <th>f</th>
-                <th>g</th>
-                <th>h</th>
+                <td data-x-marker="a" data-y-marker="1"><div class="wr"></div></td>
+                <td data-x-marker="b"><div class="wn"></div></td>
+                <td data-x-marker="c"><div class="wb"></div></td>
+                <td data-x-marker="d"><div class="wq"></div></td>
+                <td data-x-marker="e"><div class="wk"></div></td>
+                <td data-x-marker="f"><div class="wb"></div></td>
+                <td data-x-marker="g"><div class="wn"></div></td>
+                <td data-x-marker="h"><div class="wr"></div></td>
             </tr>
         </tbody>
     </table>
@@ -137,6 +118,27 @@ const {chessclass} = Astro.props
     --gothamthemeb: #b58863;
 }
 
+td {
+    position: relative;
+}
+
+.board tr:last-child td::after {
+    content: attr(data-x-marker);
+    display: flex;
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    font-weight: 900;
+}
+.board tr td:first-child::before {
+    content: attr(data-y-marker);
+    display: flex;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-weight: 900;
+}
+
 table {
     border-collapse: collapse;
     position: absolute;
@@ -146,9 +148,6 @@ table {
 .board {
     border-spacing: 0;
     font-family: 'Roboto', sans-serif;
-}
-.board th {
-    padding-right: 10px;
 }
 
 .board td div {
@@ -203,6 +202,16 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         table.addEventListener('contextmenu', (event) => { event.preventDefault(); })
     })
 
+    new ResizeObserver(() => {
+        window['chessboards'][chessclass].u = (window['chessboards'][chessclass].parentElement.clientWidth) / 16;
+        let u = window['chessboards'][chessclass].u;
+
+        window['chessboards'][chessclass].parentElement.querySelectorAll('td').forEach(td => {
+            td.style.width = `${2 * u}px`
+            td.style.height = `${2 * u}px`
+        })
+    }).observe(window['chessboards'][chessclass].parentElement)
+
     /*
     INITIALISATION
     */
@@ -211,7 +220,7 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
     document.querySelector(`.${chessclass}`).chessboard = [];
     let chessboard = document.querySelector(`.${chessclass}`).chessboard;
     // u unit
-    document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth) / 18;
+    document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth) / 16;
     let u = document.querySelector(`.${chessclass}`).u;
     document.querySelector(`.${chessclass}`).datas = { offsetX: 0, offsetY: 0, mouseX: 0, mouseY: 0, indexX: 0, indexY: 0, startX: 0, startY: 0, currentX: 0, currentY: 0, lastMoveX: -1, lastMoveY: -1, activePiece: null, markedPiece: null, warnCases: [], move: true }
 
@@ -270,8 +279,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
                 t.datas.indexY++;
             t.datas.indexX = parseInt(t.datas.indexX);
             t.datas.indexY = parseInt(t.datas.indexY);
-            let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece) - 1;
-            let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 9) - 9;
+            let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece);
+            let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 8) - 8;
             
             t.datas.currentY = Y - t.datas.indexY;
             t.datas.currentX = X - t.datas.indexX;
@@ -289,8 +298,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             t.datas.lastMoveX = t.datas.currentX;
             t.datas.lastMoveY = t.datas.currentY;
             // LOG IN CASE OF PROBLEMS
-            //console.log(startX, startY)
-            //console.log(currentX, currentY)
+            //console.log(t.datas.startX, t.datas.startY)
+            //console.log(t.datas.currentX, t.datas.currentY)
         }
 
         if (t.warnX > -1 && t.warnY > -1) {
@@ -298,11 +307,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             if (target.tagName == 'DIV')
                 target = target.parentElement;
 
-            let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
-            let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
-
-            //console.log(X, t.warnX)
-            //console.log(Y, t.warnY)
+            let X = Array.prototype.indexOf.call(target.parentNode.children, target);
+            let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 8) - 8;
         }
     }
     window['chessboards'][chessclass].onmouseup = (event) => { 
@@ -387,8 +393,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
                 t.datas.indexY++;
             t.datas.indexX = parseInt(t.datas.indexX);
             t.datas.indexY = parseInt(t.datas.indexY);
-            let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece) - 1;
-            let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 9) - 9;
+            let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece);
+            let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 8) - 8;
             
             t.datas.currentY = Y - t.datas.indexY;
             t.datas.currentX = X - t.datas.indexX;
@@ -450,11 +456,10 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             target = target.parentElement;
 
         if (event.which == 3) {
-            t.warnX = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
-            t.warnY = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+            t.warnX = Array.prototype.indexOf.call(target.parentNode.children, target);
+            t.warnY = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 8) - 8;
             t.warnT = document.createElement('div');
             t.parentElement.querySelector('table[data-theme]').appendChild(t.warnT)
-            console.log(t.parentElement.querySelector('table[data-theme]'))
 
             if (t.arrows == null) 
                 t.arrows = {}
@@ -470,8 +475,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         if (event.target.tagName == 'DIV')
             target = target.parentElement;
 
-        let X = Array.prototype.indexOf.call(target.parentNode.children, target) - 1;
-        let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 9) - 9;
+        let X = Array.prototype.indexOf.call(target.parentNode.children, target);
+        let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 8) - 8;
 
         if (X == t.warnX && Y == t.warnY) {
             let ct = t.parentElement.querySelector('table[data-theme]').querySelectorAll('tr')[Y].querySelectorAll('td')[X]
@@ -494,8 +499,25 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         if (t.arrows[`${X}${t.warnX}${Y}${t.warnY}`] != null) {
             t.parentElement.querySelector('table[data-theme]').removeChild(t.warnT)
             t.parentElement.querySelector('table[data-theme]').removeChild(t.arrows[`${X}${t.warnX}${Y}${t.warnY}`])
+            delete t.arrows[`${X}${t.warnX}${Y}${t.warnY}`];
         }
         else {
+            t.warnT.style.width = '10px';
+            t.warnT.style.height = '10px';
+            t.warnT.style.borderRadius = '10px';
+            t.warnT.style.background = 'red'
+            t.warnT.style.position = 'absolute'
+
+            console.log(t.u)
+
+            t.warnT.style.left = `${(X * t.u * 2)}px`;
+            t.warnT.style.top = `${(Y * t.u * 2)}px`;
+            t.warnT.style.left = 'red'
+
+            console.log(X, Y)
+
+            
+            
             t.arrows[`${X}${t.warnX}${Y}${t.warnY}`] = t.warnT
         }
 
@@ -519,10 +541,6 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         }
     }
 
-    chessboardtable.querySelectorAll('th').forEach(e => {
-        e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
-        e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
-    })
     chessboardtable.querySelectorAll('td').forEach(e => {
         e.addEventListener('mousedown', (event) => { if (event.preventDefault) event.preventDefault() })
         e.addEventListener('touchstart', (event) => { if (event.preventDefault) event.preventDefault() })
@@ -531,9 +549,9 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         pieces[i].addEventListener('mousedown', (event) => { event.preventDefault(); focusPiece(event) })
         pieces[i].addEventListener('touchstart', (event) => { mobileFocusPiece(event) })
     }
-    for (let i = 0; i < chessboardtable.children.length - 1; i++) {
+    for (let i = 0; i < chessboardtable.children.length; i++) {
         chessboard.push([]);
-        for (let j = 1; j < chessboardtable.children[i].children.length; j++) {
+        for (let j = 0; j < chessboardtable.children[i].children.length; j++) {
             chessboard[chessboard.length - 1].push(chessboardtable.children[i].children[j])
             chessboardtable.children[i].children[j].addEventListener('mousedown', (event) => { event.preventDefault(); startWarnCase(event) })
             chessboardtable.children[i].children[j].addEventListener('mouseup', (event) => { event.preventDefault(); endWarnCase(event) })
