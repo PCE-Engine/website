@@ -502,9 +502,11 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             delete t.arrows[`${X}${t.warnX}${Y}${t.warnY}`];
         }
         else {
-            t.warnT.style.width = '10px';
-            t.warnT.style.height = '10px';
-            t.warnT.style.borderRadius = '10px';
+            t.warnT.style.width = `5px`;
+            t.warnT.style.height = `${t.u * 2 * Math.sqrt(Math.pow(Math.abs(Y - t.warnY) + 1, 2) + Math.pow(Math.abs(X - t.warnX) + 1, 2))}px`;
+            t.warnT.style.transformOrigin = 'top center';
+            t.warnT.style.transform = `rotate(${-Math.atan(Math.abs(X - t.warnX) - 1, Math.abs(Y - t.warnY) - 1) * (180 / Math.PI)}deg)`
+            t.warnT.style.borderRadius = '5px';
             t.warnT.style.background = 'red'
             t.warnT.style.position = 'absolute'
 
@@ -514,6 +516,7 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             t.warnT.style.top = `${(Y * t.u * 2)}px`;
             t.warnT.style.left = 'red'
 
+            console.log(t.warnX, t.warnY)
             console.log(X, Y)
 
             
