@@ -145,6 +145,7 @@ table {
     top: 0px;
     right: 0px;
 }
+
 .board {
     border-spacing: 0;
     font-family: 'Roboto', sans-serif;
@@ -259,7 +260,12 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             t.datas.activePiece.style.height = `${2 * t.u}px` 
             t.datas.activePiece.style.width = `${2 * t.u}px` 
             t.datas.markedPiece = event.target.parentElement;
-            t.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+            //t.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px red';
+
+            let x = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.children, t.datas.markedPiece), 
+                y = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.parentElement.children, t.datas.markedPiece.parentElement);
+
+            document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = 'inset 0 0 0 3px red';
             // call function get moves
         }
     }
@@ -289,11 +295,14 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             if (t.datas.lastMoveX != -1 && t.datas.lastMoveY != -1) {
                 if (t.chessboard.length - t.datas.lastMoveY - 1 >= 0 && t.chessboard.length - t.datas.lastMoveY - 1 < t.chessboard.length)
                     if (t.datas.lastMoveX >= 0 && t.datas.lastMoveX < t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1].length)
-                        t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1][t.datas.lastMoveX].style.boxShadow = '';
+                        document.querySelector('table[data-theme] tbody').children[t.datas.lastMoveY].children[t.datas.lastMoveX].style.boxShadow = '';
                 if (t.chessboard.length - t.datas.currentY - 1 >= 0 && t.chessboard.length - t.datas.currentY - 1 < t.chessboard.length)
                     if (t.datas.currentX >= 0 && t.datas.currentX < t.chessboard[t.chessboard.length - t.datas.currentY - 1].length)
-                        t.chessboard[t.chessboard.length - t.datas.currentY - 1][t.datas.currentX].style.boxShadow = 'inset 0 0 0 3px #78acd6';
-                t.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+                        document.querySelector('table[data-theme] tbody').children[t.datas.currentY].children[t.datas.currentX].style.boxShadow = 'inset 0 0 0 3px blue';
+                
+                let x = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.children, t.datas.markedPiece), 
+                    y = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.parentElement.children, t.datas.markedPiece.parentElement);
+                document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = 'inset 0 0 0 3px green';
             }
             t.datas.lastMoveX = t.datas.currentX;
             t.datas.lastMoveY = t.datas.currentY;
@@ -306,9 +315,6 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             let target = event.target;
             if (target.tagName == 'DIV')
                 target = target.parentElement;
-
-            let X = Array.prototype.indexOf.call(target.parentNode.children, target);
-            let Y = Math.abs(Array.prototype.indexOf.call(target.parentNode.parentNode.children, target.parentNode) + 8) - 8;
         }
     }
     window['chessboards'][chessclass].onmouseup = (event) => { 
@@ -338,7 +344,7 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             }
         }
         t.datas.activePiece = null; 
-        t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1][t.datas.lastMoveX].style.boxShadow = '';
+        document.querySelector('table[data-theme] tbody').children[t.datas.currentY].children[t.datas.currentX].style.boxShadow = '';
         [t.datas.currentY, t.datas.currentX, t.datas.startY, t.datas.startX, t.datas.lastMoveY, t.datas.lastMoveX] = [0, 0, 0, 0, 0, 0]
     }
     /*
@@ -348,7 +354,6 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         let t = event.target;
         while (!t.classList.contains('board'))
             t = t.parentElement;
-
         if (
         ((t.datas.move && (Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0))
         || 
@@ -381,7 +386,6 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         let t = event.target;
         while (!t.classList.contains('board'))
             t = t.parentElement;
-
         if (t.datas.activePiece != null) {
             t.datas.activePiece.style.left = `${event.touches[0].clientX - t.u}px` 
             t.datas.activePiece.style.top =`${event.touches[0].clientY - t.u}px`
@@ -502,24 +506,23 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             delete t.arrows[`${X}${t.warnX}${Y}${t.warnY}`];
         }
         else {
-            t.warnT.style.width = `5px`;
-            t.warnT.style.height = `${t.u * 2 * Math.sqrt(Math.pow(Math.abs(Y - t.warnY) + 1, 2) + Math.pow(Math.abs(X - t.warnX) + 1, 2))}px`;
-            t.warnT.style.transformOrigin = 'top center';
-            t.warnT.style.transform = `rotate(${-Math.atan(Math.abs(X - t.warnX) - 1, Math.abs(Y - t.warnY) - 1) * (180 / Math.PI)}deg)`
-            t.warnT.style.borderRadius = '5px';
-            t.warnT.style.background = 'red'
-            t.warnT.style.position = 'absolute'
+            let hyp = t.u * 2 * Math.sqrt(Math.pow(Math.abs(Y - t.warnY), 2) + Math.pow(Math.abs(X - t.warnX), 2));
 
-            console.log(t.u)
+            t.warnT.style.width = `${t.u / 2}px`;
+            t.warnT.style.height = `${hyp}px`;
+            t.warnT.style.transformOrigin = 'top center';
+            t.warnT.style.transform = `translate(${t.u - (t.u / 4)}px, ${t.u}px) rotate(${(Math.atan(Math.abs(X - t.warnX) / Math.abs(Y - t.warnY)) / Math.PI * 180) * (X < t.warnX ? -1 : 1) * (Y > t.warnY ? -1 : 1) + (Y > t.warnY ? 180 : 0)}deg)`;
+            t.warnT.style.background = '#8fe3a5'
+            t.warnT.style.position = 'absolute'
 
             t.warnT.style.left = `${(X * t.u * 2)}px`;
             t.warnT.style.top = `${(Y * t.u * 2)}px`;
-            t.warnT.style.left = 'red'
+            t.warnT.style.zIndex = '2';
+            t.warnT.style.opacity = '0.75';     
+            t.warnT.style.pointerEvents = 'none'
 
-            console.log(t.warnX, t.warnY)
-            console.log(X, Y)
-
-            
+            t.warnT.innerHTML = `<div style="position: absolute; width: ${t.u / 2}px; height: ${t.u}px; background: #8fe3a5; transform-origin: top center; left: 50%; top: 0px; transform: translateX(calc(-50% + ${t.u / 6}px)) translateY(-${t.u / 4}px) rotate(45deg);"></div>
+                                 <div style="position: absolute; width: ${t.u / 2}px; height: ${t.u}px; background: #8fe3a5; transform-origin: top center; left: 50%; top: 0px; transform: translateX(calc(-50% - ${t.u / 6}px)) translateY(-${t.u / 4}px) rotate(-45deg);"></div>`
             
             t.arrows[`${X}${t.warnX}${Y}${t.warnY}`] = t.warnT
         }
@@ -541,6 +544,7 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
                 warnCases[0].style.background = ''
                 warnCases.shift()
             }
+            t.parentElement.querySelector('table[data-theme]').querySelectorAll('div').forEach(el => t.parentElement.querySelector('table[data-theme]').removeChild(el))
         }
     }
 
