@@ -232,8 +232,6 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
 
             warnT.innerHTML = `<div style="position: absolute; width: ${t.u / 1.7}px; height: ${t.u * 1.2}px; background: #8fe3a5; transform-origin: top center; left: 50%; top: 0px; transform: translateX(calc(-50% + ${t.u / 5}px)) translateY(-${t.u / 4}px) rotate(45deg);"></div>
                                  <div style="position: absolute; width: ${t.u / 1.7}px; height: ${t.u * 1.2}px; background: #8fe3a5; transform-origin: top center; left: 50%; top: 0px; transform: translateX(calc(-50% - ${t.u / 5}px)) translateY(-${t.u / 4}px) rotate(-45deg);"></div>`
-            
-            console.log(key)
         }
     }).observe(window['chessboards'][chessclass].parentElement)
 
@@ -247,7 +245,8 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
     // u unit
     document.querySelector(`.${chessclass}`).u = (document.querySelector(`.${chessclass}`).parentElement.clientWidth) / 16;
     let u = document.querySelector(`.${chessclass}`).u;
-    document.querySelector(`.${chessclass}`).datas = { offsetX: 0, offsetY: 0, mouseX: 0, mouseY: 0, indexX: 0, indexY: 0, startX: 0, startY: 0, currentX: 0, currentY: 0, lastMoveX: -1, lastMoveY: -1, activePiece: null, markedPiece: null, warnCases: [], move: true }
+    document.querySelector(`.${chessclass}`).datas = { selectedPiece: null, offsetX: -1, offsetY: -1, mouseX: -1, mouseY: -1, indexX: -1, indexY: -1, startX: -1, startY: -1, currentX: -1, currentY: -1, lastMoveX: -1, lastMoveY: -1, activePiece: null, markedPiece: null, warnCases: [], move: true }
+    document.querySelector(`.${chessclass}`).arrows = {}
 
     let chessboardtable = document.querySelector(`.${chessclass}`).querySelector('tbody');
     let pieces = chessboardtable.querySelectorAll('div');
@@ -271,6 +270,14 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         (!t.datas.move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
         && event.which == 1
         ) {
+            if (t.datas.activePiece == event.target) {
+                let x = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.children, t.datas.markedPiece), 
+                y = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.parentElement.children, t.datas.markedPiece.parentElement);
+
+                document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = '';
+                return;
+            }
+
             // delete marker
             while (t.datas.warnCases.length > 0) {
                 t.datas.warnCases[0].style.background = ''
@@ -321,11 +328,25 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             t.datas.indexY = parseInt(t.datas.indexY);
             let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece);
             let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 8) - 8;
-            
+
             t.datas.currentY = Y - t.datas.indexY;
             t.datas.currentX = X - t.datas.indexX;
             t.datas.startX = X
             t.datas.startY = Y
+
+            if (t.datas.currentX < -1 || t.datas.currentX > 8 || t.datas.currentY < -1 || t.datas.currentY > 8) {
+                t.datas.activePiece.style.position = `initial`
+                t.datas.activePiece.style.height = `` 
+                t.datas.activePiece.style.width = `` 
+                t.datas.activePiece = null;
+
+                if (t.chessboard.length - t.datas.lastMoveY - 1 >= 0 && t.chessboard.length - t.datas.lastMoveY - 1 < t.chessboard.length)
+                    if (t.datas.lastMoveX >= 0 && t.datas.lastMoveX < t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1].length)
+                        document.querySelector('table[data-theme] tbody').children[t.datas.lastMoveY].children[t.datas.lastMoveX].style.boxShadow = '';
+
+                return;
+            }
+
             if (t.datas.lastMoveX != -1 && t.datas.lastMoveY != -1) {
                 if (t.chessboard.length - t.datas.lastMoveY - 1 >= 0 && t.chessboard.length - t.datas.lastMoveY - 1 < t.chessboard.length)
                     if (t.datas.lastMoveX >= 0 && t.datas.lastMoveX < t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1].length)
@@ -361,26 +382,44 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
             t.datas.activePiece.style.height = `` 
             t.datas.activePiece.style.width = `` 
         }
+
+        let x = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.children, t.datas.markedPiece), 
+            y = Array.prototype.indexOf.call(t.datas.markedPiece.parentElement.parentElement.children, t.datas.markedPiece.parentElement);
+
         // verification
         if ((true) && t.datas.activePiece) {
             if ((t.datas.currentX != t.datas.startX || t.datas.currentY != t.datas.startY) && (t.chessboard.length - t.datas.currentY - 1 < t.chessboard.length && t.chessboard.length - t.datas.currentY - 1 >= 0) && (t.datas.currentX < t.chessboard[t.chessboard.length - t.datas.currentY - 1].length && t.datas.currentX >= 0)) {
                 t.datas.activePiece.parentElement.removeChild(t.datas.activePiece);
                 t.chessboard[t.chessboard.length - t.datas.currentY - 1][t.datas.currentX].innerHTML = ''
                 t.chessboard[t.chessboard.length - t.datas.currentY - 1][t.datas.currentX].appendChild(t.datas.activePiece);
-                if (t.datas.markedPiece)
-                    t.datas.markedPiece.style.boxShadow =  '';
+                
                 // delete marker
                 while (t.datas.warnCases.length > 0) {
                     t.datas.warnCases[0].style.background = ''
                     t.datas.warnCases.shift()
                 }
                 t.parentElement.querySelector('table[data-theme]').querySelectorAll('div').forEach(el => { try { t.parentElement.querySelector('table[data-theme]').removeChild(el) } catch {}})
+                
+                document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = ''
+
+                t.datas.selectedPiece = null;
                 t.datas.move = !t.datas.move
             }
         }
-        t.datas.activePiece = null; 
-        document.querySelector('table[data-theme] tbody').children[t.datas.currentY].children[t.datas.currentX].style.boxShadow = '';
-        [t.datas.currentY, t.datas.currentX, t.datas.startY, t.datas.startX, t.datas.lastMoveY, t.datas.lastMoveX] = [0, 0, 0, 0, 0, 0]
+         
+        if (t.datas.lastMoveY == -1 && t.datas.lastMoveX == -1 && t.datas.activePiece) {
+            if (t.datas.selectedPiece == null) {
+                document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = 'inset 0 0 0 3px #94d678'; 
+                t.datas.selectedPiece = t.datas.activePiece;
+            }
+            else {
+                document.querySelector('table[data-theme] tbody').children[y].children[x].style.boxShadow = '';
+                t.datas.selectedPiece = null;
+            }
+        }
+        t.datas.activePiece = null;
+        try {document.querySelector('table[data-theme] tbody').children[t.datas.currentY].children[t.datas.currentX].style.boxShadow = '';} catch {}
+        [t.datas.currentY, t.datas.currentX, t.datas.startY, t.datas.startX, t.datas.lastMoveY, t.datas.lastMoveX] = [-1, -1, -1, -1, -1, -1]
     }
     /*
     MOBILE
@@ -395,7 +434,7 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
         (!t.datas.move && !(Array.prototype.indexOf.call(event.target.classList, 'wr') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wn') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wb') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wq') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wk') >= 0 || Array.prototype.indexOf.call(event.target.classList, 'wp') >= 0)))
         ) {
             if (t.datas.markedPiece)
-                document.querySelector('table[data-theme] tbody').children[t.datas.markedXY[1]].children[t.datas.markedXY[0]].style.boxShadow =  '';
+                t.datas.markedPiece.style.boxShadow =  '';
             t.datas.activePiece = event.target;
     
             t.datas.mouseX = event.touches[0].clientX;
@@ -414,6 +453,22 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
     
             t.datas.markedPiece = event.target.parentElement;
             t.datas.markedPiece.style.boxShadow = 'inset 0 0 0 3px #94d678';
+
+            t.datas.indexX = (t.datas.mouseX - event.touches[0].clientX - t.datas.offsetX) / (t.u * 2)
+            if (t.datas.indexX > 0)
+                t.datas.indexX++;
+            t.datas.indexY = (t.datas.mouseY - event.touches[0].clientY - t.datas.offsetY) / (t.u * 2)
+            if (t.datas.indexY > 0)
+                t.datas.indexY++;
+            t.datas.indexX = parseInt(t.datas.indexX);
+            t.datas.indexY = parseInt(t.datas.indexY);
+            let X = Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.children, t.datas.markedPiece);
+            let Y = Math.abs(Array.prototype.indexOf.call(t.datas.markedPiece.parentNode.parentNode.children, t.datas.markedPiece.parentNode) + 8) - 8;
+            
+            t.datas.currentY = Y - t.datas.indexY;
+            t.datas.currentX = X - t.datas.indexX;
+            t.datas.startX = X
+            t.datas.startY = Y
             // call function get moves
         }
     }
@@ -468,20 +523,26 @@ table[data-theme=gotham] tr:nth-child(even) td:nth-child(odd), table[data-theme=
                     t.datas.activePiece.parentElement.removeChild(t.datas.activePiece);
                     t.chessboard[t.chessboard.length - t.datas.currentY - 1][t.datas.currentX].innerHTML = ''
                     t.chessboard[t.chessboard.length - t.datas.currentY - 1][t.datas.currentX].appendChild(t.datas.activePiece);
-                    if (t.datas.markedPiece)
-                        t.datas.markedPiece.style.boxShadow =  '';
-                    // delete marker
-                    while (t.datas.warnCases.length > 0) {
-                        t.datas.warnCases[0].style.background = ''
-                        t.datas.warnCases.shift()
-                    }
-                    t.parentElement.querySelector('table[data-theme]').querySelectorAll('div').forEach(el => { try { t.parentElement.querySelector('table[data-theme]').removeChild(el) } catch {}})
+
+                    t.chessboard[t.chessboard.length - t.datas.startY - 1][t.datas.startX].style.boxShadow = '';
+                    t.datas.selectedPiece = null;
                     t.datas.move = !t.datas.move
                 }
             }
-            t.datas.activePiece = null; 
-            t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1][t.datas.lastMoveX].style.boxShadow = '';
-            [t.datas.currentY, t.datas.currentX, t.datas.startY, t.datas.startX, t.datas.lastMoveY, t.datas.lastMoveX] = [0, 0, 0, 0, 0, 0]
+            if (t.datas.lastMoveY == -1 && t.datas.lastMoveX == -1 && t.datas.activePiece) {
+                if (t.datas.selectedPiece == null) {
+                    t.chessboard[t.chessboard.length - t.datas.startY - 1][t.datas.startX].style.boxShadow = 'inset 0 0 0 3px #94d678';
+                    t.datas.selectedPiece = t.datas.activePiece;
+                }
+                else {
+                    t.chessboard[t.chessboard.length - t.datas.startY - 1][t.datas.startX].style.boxShadow = '';
+                    t.datas.selectedPiece = null;
+                }
+            }
+            t.datas.activePiece = null;
+
+            try { t.chessboard[t.chessboard.length - t.datas.lastMoveY - 1][t.datas.lastMoveX].style.boxShadow = '';  } catch {}            
+            [t.datas.currentY, t.datas.currentX, t.datas.startY, t.datas.startX, t.datas.lastMoveY, t.datas.lastMoveX] = [-1, -1, -1, -1, -1, -1]
     }
     /*
     WARN CASE
